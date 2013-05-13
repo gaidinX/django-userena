@@ -1,0 +1,19 @@
+{% load i18n %}{% autoescape off %}{% load url from future %}
+<html>
+<head><title>Activation email</title></head>
+<body>
+{% if not without_usernames %}{% blocktrans with user.username as username %}Dear {{ username }},{% endblocktrans %}<br/>
+{% endif %}
+{% blocktrans with site.name as site %}Thank you for signing up at {{ site }}.{% endblocktrans %}
+
+{% trans "To activate your account you should click on the link below:" %}</br>
+
+{{ protocol }}://{{ site.domain }}{% url 'userena_activate' activation_key %}</br>
+</br>
+{% trans "Thanks for using our site!" %}</br>
+</br>
+{% trans "Sincerely" %},</br>
+{{ site.name }}
+</body>
+</html>
+{% endautoescape %}

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -171,7 +171,7 @@ class UserenaSignup(models.Model):
             return True
         return False
 
-    def send_activation_email(self):
+    def send_activation_email(self, first_name = '', last_name = ''):
         """
         Sends a activation email to the user.
 
@@ -180,6 +180,8 @@ class UserenaSignup(models.Model):
 
         """
         context = {'user': self.user,
+                   'first_name': first_name,
+                   'last_Name': last_name,
                   'without_usernames': userena_settings.USERENA_WITHOUT_USERNAMES,
                   'protocol': get_protocol(),
                   'activation_days': userena_settings.USERENA_ACTIVATION_DAYS,
@@ -190,12 +192,13 @@ class UserenaSignup(models.Model):
                                    context)
         subject = ''.join(subject.splitlines())
 
-        message = render_to_string('userena/emails/activation_email_message.txt',
+        text_content = render_to_string('userena/emails/activation_email_message.txt',
                                    context)
-        send_mail(subject,
-                  message,
-                  settings.DEFAULT_FROM_EMAIL,
-                  [self.user.email, ])
+        html_content = render_to_string('userena/emails/activation_email_message.html',
+                                   context)
+        email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.user.email, ])
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
 
 class UserenaBaseProfile(models.Model):

@@ -181,7 +181,7 @@ class UserenaSignup(models.Model):
         """
         context = {'user': self.user,
                    'first_name': first_name,
-                   'last_Name': last_name,
+                   'last_name': last_name,
                   'without_usernames': userena_settings.USERENA_WITHOUT_USERNAMES,
                   'protocol': get_protocol(),
                   'activation_days': userena_settings.USERENA_ACTIVATION_DAYS,

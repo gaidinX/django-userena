@@ -114,7 +114,7 @@ def signup(request, signup_form=SignupForm,
     form = signup_form()
 
     if request.method == 'POST':
-        form = signup_form(request.POST, request.FILES)
+        form = signup_form(request.POST, request.FILES, request=request)
         if form.is_valid():
             user = form.save()
 

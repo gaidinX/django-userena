@@ -65,7 +65,7 @@ class UserenaManager(UserManager):
         now = get_datetime_now()
 
         new_user = get_user_model().objects.create_user(
-            username, email, password, first_name=first_name, last_name=last_name)
+            username, email, first_name, last_name, password)
         new_user.is_active = active
         new_user.save()
 
